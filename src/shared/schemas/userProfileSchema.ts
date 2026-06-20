@@ -13,10 +13,10 @@ export const userProfileUpsertSchema = z.object({
   height: z.number(),
   activityLevel: z.enum(ActivityLevel),
   goal: z.enum(Goal),
-  dailyCalories: z.number(),
-  carbo: z.number(),
-  protein: z.number(),
-  fat: z.number(),
+  dailyCalories: z.number().optional(),
+  carbo: z.number().optional(),
+  protein: z.number().optional(),
+  fat: z.number().optional(),
 });
 
 export const userProfileSchema = z.object({
