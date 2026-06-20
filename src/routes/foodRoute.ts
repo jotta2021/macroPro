@@ -1,7 +1,11 @@
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import z from "zod";
-import { foodCreateSchema, foodSchema, foodListQuerySchema } from "../shared/schemas/foodSchem.js";
+import {
+  foodCreateSchema,
+  foodSchema,
+  foodListQuerySchema,
+} from "../shared/schemas/foodSchem.js";
 import { errorResponseSchema } from "../errors/index.js";
 import { ListFoodsController } from "../controllers/food/listFoodsController.js";
 

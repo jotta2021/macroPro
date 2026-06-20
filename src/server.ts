@@ -13,6 +13,7 @@ import FoodRoute from "./routes/foodRoute.js";
 import { fromNodeHeaders } from "better-auth/node";
 import { auth } from "./lib/auth.js";
 import { userProfileRoute } from "./routes/userProfileRoute.js";
+import { MealRoute } from "./routes/mealRoute.js";
 const app = Fastify({
   logger: true,
 });
@@ -67,6 +68,7 @@ await app.register(fastifyApiReference, {
 //routees
 app.register(FoodRoute, { prefix: "/foods" });
 app.register(userProfileRoute, { prefix: "/profile" });
+app.register(MealRoute, { prefix: "/meals" });
 
 await app.withTypeProvider<ZodTypeProvider>().route({
   method: "GET",
