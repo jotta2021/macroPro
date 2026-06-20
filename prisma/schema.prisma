@@ -1,0 +1,137 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String       @id @default(uuid())
+  name          String
+  email         String       @unique
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  emailVerified Boolean      @default(false)
+  image         String?
+  meals         Meal[]
+  profile       UserProfile?
+  accounts      Account[]
+  sessions      Session[]
+
+  @@map("user")
+}
+
+model UserProfile {
+  id            String        @id @default(uuid())
+  userId        String        @unique
+  age           Int?
+  gender        Gender?
+  weight        Float
+  height        Float
+  activityLevel ActivityLevel
+  goal          Goal
+  dailyCalories Float
+  carbo         Float
+  protein       Float
+  fat           Float
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  user          User          @relation(fields: [userId], references: [id])
+}
+
+model Food {
+  id         String     @id @default(uuid())
+  name       String
+  calories   Float
+  carbo      Float
+  protein    Float
+  fat        Float
+  baseGrams  Float      @default(100)
+  consumedIn MealFood[]
+}
+
+model Meal {
+  id     String     @id @default(uuid())
+  userId String
+  name   String
+  date   DateTime   @default(now())
+  user   User       @relation(fields: [userId], references: [id])
+  items  MealFood[]
+
+  @@index([userId, date])
+}
+
+model MealFood {
+  id            String @id @default(uuid())
+  mealId        String
+  foodId        String
+  consumedGrams Float
+  food          Food   @relation(fields: [foodId], references: [id])
+  meal          Meal   @relation(fields: [mealId], references: [id], onDelete: Cascade)
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+enum ActivityLevel {
+  SEDENTARY
+  MODERATE
+  INTENSE
+}
+
+enum Goal {
+  HYPERTROPHY
+  MAINTENANCE
+  WEIGHTLOSS
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
