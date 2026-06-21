@@ -16,7 +16,7 @@ export class UpdateMealsService {
       throw new UnauthorizedError("You are not allowed to modify this meal");
     }
 
-    const { name, date, items } = body;
+    const { type, date, items } = body;
 
     const updatedMeal = await prisma.$transaction(async (tx) => {
       // Remove all existing meal foods associated with this meal
@@ -28,7 +28,7 @@ export class UpdateMealsService {
       return await tx.meal.update({
         where: { id },
         data: {
-          name,
+          type,
           date,
           items: {
             createMany: {

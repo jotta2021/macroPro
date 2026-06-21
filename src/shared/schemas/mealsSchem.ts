@@ -1,4 +1,5 @@
 import z from "zod";
+import { MealType } from "../../../generated/prisma/enums.js";
 
 /**
  * model Meal {
@@ -22,7 +23,7 @@ model MealFood {
 }
  */
 export const CreateMealsSchema = z.object({
-  name: z.string(),
+  type: z.enum(MealType),
   date: z.coerce.date(),
   items: z.array(
     z.object({
@@ -37,7 +38,7 @@ export const UpdateMealsParamsSchema = z.object({
 });
 
 export const UpdateMealsSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+  type: z.enum(MealType),
   date: z.coerce.date(),
   items: z.array(
     z.object({
@@ -68,9 +69,30 @@ export const MealItemResponseSchema = z.object({
 export const MealResponseSchema = z.object({
   id: z.string(),
   userId: z.string(),
-  name: z.string(),
+  type: z.enum(MealType),
   date: z.date(),
   items: z.array(MealItemResponseSchema),
 });
 
 export const ListMealsResponseSchema = z.array(MealResponseSchema);
+
+export const GetMealParamsSchema = z.object({
+  id: z.string().uuid("Invalid meal ID format"),
+});
+
+export const DailySummaryQuerySchema = z.object({
+  date: z.coerce.date(),
+});
+
+export const DailySummaryResponseSchema = z.object({
+  caloriesTarget: z.number(),
+  caloriesConsumed: z.number(),
+  carboTarget: z.number(),
+  carboConsumed: z.number(),
+  proteinTarget: z.number(),
+  proteinConsumed: z.number(),
+  fatTarget: z.number(),
+  fatConsumed: z.number(),
+});
+
+

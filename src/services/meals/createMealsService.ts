@@ -3,11 +3,11 @@ import { createMealsModel } from "../../shared/models/mealsModels.js";
 
 export class CreateMealsService {
   async execute(body: createMealsModel, userId: string) {
-    const { name, date, items } = body;
+    const { type, date, items } = body;
     const meal = await prisma.meal.create({
       data: {
         userId,
-        name,
+        type,
         date,
         items: {
           createMany: {

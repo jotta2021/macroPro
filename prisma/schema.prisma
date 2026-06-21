@@ -55,7 +55,7 @@ model Food {
 model Meal {
   id     String     @id @default(uuid())
   userId String
-  name   String
+  type   MealType
   date   DateTime   @default(now())
   user   User       @relation(fields: [userId], references: [id])
   items  MealFood[]
@@ -134,4 +134,11 @@ enum Goal {
 enum Gender {
   MALE
   FEMALE
+}
+
+enum MealType {
+  BREAKFAST // Café da manhã
+  LUNCH // Almoço
+  DINNER // Jantar
+  SNACK // Lanche (inclui pré, pós-treino, etc.)
 }
