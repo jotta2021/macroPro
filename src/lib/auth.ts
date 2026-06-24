@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { openAPI } from "better-auth/plugins";
+import { openAPI, bearer } from "better-auth/plugins";
 import { expo } from "@better-auth/expo";
 import prisma from "./prismaClient.js";
 
@@ -11,7 +11,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-  baseURL: "https://berenice-costliest-ruthie.ngrok-free.dev",
+  baseURL: "http://192.168.3.230:3000",
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -19,7 +19,7 @@ export const auth = betterAuth({
     },
   },
 
-  plugins: [openAPI(), expo()],
+  plugins: [openAPI(), expo(), bearer()],
   trustedOrigins: [
     "http://localhost:3000",
     "http://10.0.2.2:3000",

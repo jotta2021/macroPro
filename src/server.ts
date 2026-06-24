@@ -94,7 +94,8 @@ app.route({
   async handler(request, reply) {
     try {
       // Construct request URL, respecting reverse proxy headers (e.g. ngrok HTTPS)
-      const protocol = (request.headers["x-forwarded-proto"] as string) || "http";
+      const protocol =
+        (request.headers["x-forwarded-proto"] as string) || "http";
       const url = new URL(request.url, `${protocol}://${request.headers.host}`);
 
       // Convert Fastify headers to standard Headers object
@@ -123,7 +124,7 @@ app.route({
 await app.ready();
 app.swagger();
 try {
-  await app.listen({ port: Number(process.env.PORT) || 3000 });
+  await app.listen({ port: Number(process.env.PORT) || 3000, host: "0.0.0.0" });
 } catch (err) {
   app.log.error(err);
   process.exit(1);
