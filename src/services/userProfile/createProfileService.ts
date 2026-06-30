@@ -37,6 +37,17 @@ export class CreateProfileService {
         carbo: macrosData.carbo,
         protein: macrosData.protein,
         fat: macrosData.fat,
+        mealTargets: {
+          create: macrosData.mealDistribuition.map((mealTarget) => {
+            return {
+              mealType: mealTarget.mealType,
+              calories: mealTarget.calories,
+              carbo: mealTarget.carbo,
+              protein: mealTarget.protein,
+              fat: mealTarget.fat,
+            };
+          }),
+        },
       },
     });
     return profile;

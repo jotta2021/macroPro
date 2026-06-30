@@ -20,6 +20,16 @@ export class GetProfileService {
             emailVerified: true,
           },
         },
+        mealTargets: {
+          select: {
+            id: true,
+            mealType: true,
+            calories: true,
+            carbo: true,
+            protein: true,
+            fat: true,
+          },
+        },
       },
     });
 

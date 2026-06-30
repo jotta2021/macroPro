@@ -85,14 +85,36 @@ export const DailySummaryQuerySchema = z.object({
 });
 
 export const DailySummaryResponseSchema = z.object({
-  caloriesTarget: z.number(),
-  caloriesConsumed: z.number(),
-  carboTarget: z.number(),
-  carboConsumed: z.number(),
-  proteinTarget: z.number(),
-  proteinConsumed: z.number(),
-  fatTarget: z.number(),
-  fatConsumed: z.number(),
+  dailySummary: z.object({
+    caloriesTarget: z.number(),
+    caloriesConsumed: z.number(),
+    proteinTarget: z.number(),
+    proteinConsumed: z.number(),
+    carboTarget: z.number(),
+    carboConsumed: z.number(),
+    fatTarget: z.number(),
+    fatConsumed: z.number(),
+  }),
+  meals: z.array(
+    z.object({
+      type: z.enum(MealType),
+      mealId: z.string().optional(),
+      caloriesTarget: z.number(),
+      caloriesConsumed: z.number(),
+      proteinConsumed: z.number(),
+      carboConsumed: z.number(),
+      fatConsumed: z.number(),
+      items: z.array(
+        z.object({
+          id: z.string(),
+          name: z.string(),
+          grams: z.number(),
+          calories: z.number(),
+          protein: z.number(),
+          carbo: z.number(),
+          fat: z.number(),
+        }),
+      ),
+    }),
+  ),
 });
-
-

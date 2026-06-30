@@ -32,17 +32,19 @@ export class AiNutritionService {
     };
 
     const prompt = `
-    Atue como um nutricionista esportivo avançado. 
-    Calcule as necessidades calóricas diárias e a divisão ideal de macronutrientes (carboidratos, proteínas e gorduras) para o seguinte indivíduo:
+   Atue como um nutricionista esportivo avançado. 
+  Calcule as necessidades calóricas diárias, a divisão ideal de macronutrientes totais e também a distribuição dessas calorias e macros por refeição para o seguinte indivíduo:
     - Idade: ${input.age} anos
     - Sexo: ${input.gender === "MALE" ? "Masculino" : "Feminino"}
     - Peso atual: ${input.weight} kg
     - Altura: ${input.height} cm
     - Nível de Atividade Física: ${activityMap[input.activityLevel]}
     - Objetivo Principal: ${goalMap[input.goal]}
-
-    Use fórmulas científicas consolidadas (como Mifflin-St Jeor ou Harris-Benedict) ajustadas pelo nível de atividade e pelo objetivo proposto. 
-    Gere a distribuição de macros de forma que a soma das calorias deles (1g proteina = 4kcal, 1g carbo = 4kcal, 1g gordura = 9kcal) seja coerente com o total de calorias recomendadas.
+Diretrizes de cálculo:
+  1. Use fórmulas científicas consolidadas (como Mifflin-St Jeor ou Harris-Benedict) ajustadas pelo nível de atividade e pelo objetivo proposto. 
+  2. Distribua os macros de forma que a soma calórica deles (1g proteína = 4kcal, 1g carboidrato = 4kcal, 1g gordura = 9kcal) seja idêntica ao total de calorias recomendadas.
+  3. Divida o total diário em 4 blocos de refeições obrigatórios: BREAKFAST, LUNCH, DINNER e SNACK.
+  4. Na divisão por refeição, leve em consideração estratégias nutricionais eficientes (ex: maior aporte de carboidratos e proteínas no almoço/jantar, ou lanches balanceados). A soma das calorias e macros das refeições deve bater exatamente com o total diário.
   `;
 
     const response = await ai.models.generateContent({
@@ -69,8 +71,43 @@ export class AiNutritionService {
               type: Type.NUMBER,
               description: "Quantidade total de gorduras/lipídeos em gramas",
             },
+            mealDistribuition: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  mealType: {
+                    type: Type.STRING,
+                    description: "Tipo de refeição",
+                  },
+                  calories: {
+                    type: Type.NUMBER,
+                    description: "Calorias da refeição",
+                  },
+                  carbo: {
+                    type: Type.NUMBER,
+                    description: "Carboidratos da refeição",
+                  },
+                  protein: {
+                    type: Type.NUMBER,
+                    description: "Proteínas da refeição",
+                  },
+                  fat: {
+                    type: Type.NUMBER,
+                    description: "Gorduras da refeição",
+                  },
+                },
+                required: ["mealType", "calories", "carbo", "protein", "fat"],
+              },
+            },
           },
-          required: ["dailyCalories", "carbo", "protein", "fat"],
+          required: [
+            "dailyCalories",
+            "carbo",
+            "protein",
+            "fat",
+            "mealDistribuition",
+          ],
         },
       },
     });

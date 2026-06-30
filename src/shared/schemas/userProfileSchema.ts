@@ -3,6 +3,7 @@ import {
   ActivityLevel,
   Goal,
   Gender,
+  MealType,
 } from "../../../generated/prisma/enums.js";
 import { userSchema } from "better-auth";
 
@@ -17,6 +18,15 @@ export const userProfileUpsertSchema = z.object({
   carbo: z.number().optional(),
   protein: z.number().optional(),
   fat: z.number().optional(),
+});
+
+export const mealTargetSchema = z.object({
+  id: z.string(),
+  mealType: z.enum(MealType),
+  calories: z.number(),
+  carbo: z.number(),
+  protein: z.number(),
+  fat: z.number(),
 });
 
 export const userProfileSchema = z.object({
@@ -35,4 +45,5 @@ export const userProfileSchema = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   user: userSchema,
+  mealTargets: z.array(mealTargetSchema),
 });
